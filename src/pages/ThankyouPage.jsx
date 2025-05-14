@@ -1,20 +1,28 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CartContext } from '../context/CartContext';
 
 function ThankYouPage() {
     const { cartItems } = useContext(CartContext);
     const navigate = useNavigate();
+    const [orderId, setOrderId] = useState('');
 
-    const calculateTotal = () => {
-        return cartItems.reduce((total, item) => total + item.price, 0).toFixed(2);
-    };
+    useEffect(() => {
+        // Generate a random order ID
+        const generateOrderId = () => {
+            return 'ORD-' + Math.floor(100000 + Math.random() * 900000);
+        };
+        setOrderId(generateOrderId());
+    }, []);
 
     return (
         <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
             <h1 style={{ textAlign: 'center', color: '#28A745' }}>Thank You for Your Order!</h1>
             <p style={{ textAlign: 'center', fontSize: '18px', color: '#555' }}>
                 Your order has been placed successfully.
+            </p>
+            <p style={{ textAlign: 'center', fontSize: '16px', color: '#333', fontWeight: 'bold' }}>
+                Order ID: {orderId}
             </p>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '20px', justifyContent: 'center', marginTop: '20px' }}>
                 {cartItems.map((item, index) => (
@@ -45,7 +53,6 @@ function ThankYouPage() {
                 ))}
             </div>
             <div style={{ textAlign: 'center', marginTop: '20px' }}>
-                <h2>Total: ${calculateTotal()}</h2>
                 <button
                     onClick={() => navigate('/')}
                     style={{

@@ -6,6 +6,29 @@ function CartPage() {
     const navigate = useNavigate();
     const { cartItems, setCartItems } = useContext(CartContext);
 
+    const increaseQuantity = (productId) => {
+        setCartItems(
+            cartItems.map((item) =>
+                item.id === productId
+                    ? { ...item, quantity: item.quantity + 1 }
+                    : item
+            )
+        );
+    };
+
+    const decreaseQuantity = (productId) => {
+        setCartItems((prevCartItems) => {
+            const updatedCart = prevCartItems
+                .map((item) =>
+                    item.id === productId
+                        ? { ...item, quantity: item.quantity - 1 }
+                        : item
+                )
+                .filter((item) => item.quantity > 0); // Remove item if quantity is 0
+            return updatedCart;
+        });
+    };
+
     const handleCheckout = () => {
         navigate('/checkout');
     };
@@ -15,8 +38,29 @@ function CartPage() {
         setCartItems(updatedCart);
     };
 
+    const goToHome = () => {
+        navigate('/');
+    };
+
     return (
         <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
+            <button
+                onClick={goToHome}
+                style={{
+                    position: 'absolute',
+                    top: '20px',
+                    right: '20px',
+                    backgroundColor: '#007BFF',
+                    color: '#fff',
+                    border: 'none',
+                    padding: '5px 10px',
+                    borderRadius: '5px',
+                    cursor: 'pointer',
+                    fontSize: '14px',
+                }}
+            >
+                Go to Home
+            </button>
             <h1 style={{ textAlign: 'center' }}>Cart</h1>
             {cartItems.length > 0 ? (
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '20px', justifyContent: 'center' }}>
@@ -39,6 +83,35 @@ function CartPage() {
                             />
                             <h3 style={{ fontSize: '18px', margin: '10px 0' }}>{item.name}</h3>
                             <p style={{ fontSize: '16px', color: '#555' }}>${item.price}</p>
+                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', marginBottom: '10px' }}>
+                                <button
+                                    onClick={() => decreaseQuantity(item.id)}
+                                    style={{
+                                        backgroundColor: '#DC3545',
+                                        color: '#fff',
+                                        border: 'none',
+                                        padding: '5px 10px',
+                                        borderRadius: '5px',
+                                        cursor: 'pointer',
+                                    }}
+                                >
+                                    -
+                                </button>
+                                <span style={{ fontSize: '16px', fontWeight: 'bold' }}>{item.quantity}</span>
+                                <button
+                                    onClick={() => increaseQuantity(item.id)}
+                                    style={{
+                                        backgroundColor: '#28A745',
+                                        color: '#fff',
+                                        border: 'none',
+                                        padding: '5px 10px',
+                                        borderRadius: '5px',
+                                        cursor: 'pointer',
+                                    }}
+                                >
+                                    +
+                                </button>
+                            </div>
                             <button
                                 onClick={() => handleRemoveItem(index)}
                                 style={{

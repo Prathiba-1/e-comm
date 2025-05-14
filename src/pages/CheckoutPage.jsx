@@ -1,13 +1,14 @@
 import React, { useContext, useState } from 'react';
 import { CartContext } from '../context/CartContext';
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 
 function CheckoutPage() {
-    const { cartItems } = useContext(CartContext);
+    const { cartItems, setCartItems } = useContext(CartContext); // Include setCartItems
     const [userDetails, setUserDetails] = useState({
         name: '',
         email: '',
         address: '',
+        cardNumber: '',
     });
     const navigate = useNavigate();
 
@@ -23,8 +24,8 @@ function CheckoutPage() {
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log('Order placed:', { userDetails, cartItems });
-        alert('Order placed successfully!');
-        navigate('/thank-you') // Navigate to ThankYouPage
+        setCartItems([]); // Reset the cart to empty
+        navigate('/thank-you'); // Navigate to ThankYouPage
     };
 
     return (
@@ -84,7 +85,7 @@ function CheckoutPage() {
                                 onChange={handleInputChange}
                                 required
                                 style={{
-                                    width: '100%',
+                                    width: '90%',
                                     padding: '10px',
                                     border: '1px solid #ddd',
                                     borderRadius: '5px',
@@ -100,7 +101,7 @@ function CheckoutPage() {
                                 onChange={handleInputChange}
                                 required
                                 style={{
-                                    width: '100%',
+                                    width: '90%',
                                     padding: '10px',
                                     border: '1px solid #ddd',
                                     borderRadius: '5px',
@@ -115,7 +116,23 @@ function CheckoutPage() {
                                 onChange={handleInputChange}
                                 required
                                 style={{
-                                    width: '100%',
+                                    width: '90%',
+                                    padding: '10px',
+                                    border: '1px solid #ddd',
+                                    borderRadius: '5px',
+                                    resize: 'none',
+                                }}
+                            />
+                        </div>
+                        <div style={{ marginBottom: '15px' }}>
+                            <label style={{ display: 'block', marginBottom: '5px' }}>Card Number</label>
+                            <textarea
+                                name="cardNumber"
+                                value={userDetails.cardNumber}
+                                onChange={handleInputChange}
+                                required
+                                style={{
+                                    width: '90%',
                                     padding: '10px',
                                     border: '1px solid #ddd',
                                     borderRadius: '5px',
